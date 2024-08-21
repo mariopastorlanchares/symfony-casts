@@ -3,6 +3,8 @@
 namespace App\Tests\Unit\Entity;
 
 use App\Entity\Dinosaur;
+use App\Enum\HealthStatus;
+use Generator;
 use PHPUnit\Framework\TestCase;
 
 class DinosaurTest extends TestCase
@@ -26,24 +28,43 @@ class DinosaurTest extends TestCase
         self::assertSame('alo', $dino->getEnclosure());
     }
 
-    public function testDinosaurOver10MetersOrGreaterIsLarge()
+
+
+    /**
+     * @dataProvider sizeDescriptionProvider
+     * @param int $length
+     * @param string $expectedSize
+     * @return void
+     */
+    public function testDinoHasCorrectSizeDescriptionFromLength(int $length, string $expectedSize)
     {
-        $dino = new Dinosaur(name:'Big eaty', length:10);
-        self::assertSame('Large', $dino->getSizeDescription(), 'This is supposed to be a large dinosaur');
+        $dino = new Dinosaur(name:'Big eaty', length:$length);
+        self::assertSame($expectedSize, $dino->getSizeDescription());
     }
 
-    public function testDinoBetween5And9MetersIsMedium()
+
+
+    public function sizeDescriptionProvider(): Generator
     {
-        $dino = new Dinosaur(name:'Big eaty', length:5);
-        self::assertSame('Medium', $dino->getSizeDescription(), 'This is supposed to be a medium dinosaur');
+        yield [10, 'Large'];
+        yield [5, 'Medium'];
+        yield [4, 'Small'];
     }
 
 
-    public function testDinoUnder5MetersIsSmall(): void
+    public function testIsAcceptingVisitorsByDefault(): void
     {
-        $dino = new Dinosaur(name: 'Big Eaty', length: 4);
-        self::assertSame('Small', $dino->getSizeDescription(), 'This is supposed to be a small Dinosaur');
+        $dino = new Dinosaur('Dennis');
+        self::assertTrue($dino->isAcceptingVisitors());
     }
 
+
+    public function testIsAcceptingVisitorsIfSick(): void
+    {
+        $dino = new Dinosaur('Bumpy');
+        $dino->setHealth(HealthStatus::SICK);
+
+        self::assertFalse($dino->isAcceptingVisitors());
+    }
 
 }
