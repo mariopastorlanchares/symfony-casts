@@ -81,6 +81,8 @@
       <path value="$PROJECT_DIR$/testing/vendor/phpunit/php-code-coverage" />
       <path value="$PROJECT_DIR$/testing/vendor/nikic/php-parser" />
       <path value="$PROJECT_DIR$/testing/vendor/composer" />
+      <path value="$PROJECT_DIR$/testing/vendor/symfony/http-client-contracts" />
+      <path value="$PROJECT_DIR$/testing/vendor/symfony/http-client" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="8.1" />

@@ -73,6 +73,8 @@
       <excludeFolder url="file://$MODULE_DIR$/testing/vendor/symfony/yaml" />
       <excludeFolder url="file://$MODULE_DIR$/testing/vendor/theseer/tokenizer" />
       <excludeFolder url="file://$MODULE_DIR$/testing/vendor/twig/twig" />
+      <excludeFolder url="file://$MODULE_DIR$/testing/vendor/symfony/http-client" />
+      <excludeFolder url="file://$MODULE_DIR$/testing/vendor/symfony/http-client-contracts" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
