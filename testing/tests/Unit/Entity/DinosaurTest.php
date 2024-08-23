@@ -29,7 +29,6 @@ class DinosaurTest extends TestCase
     }
 
 
-
     /**
      * @dataProvider sizeDescriptionProvider
      * @param int $length
@@ -38,10 +37,9 @@ class DinosaurTest extends TestCase
      */
     public function testDinoHasCorrectSizeDescriptionFromLength(int $length, string $expectedSize)
     {
-        $dino = new Dinosaur(name:'Big eaty', length:$length);
+        $dino = new Dinosaur(name: 'Big eaty', length: $length);
         self::assertSame($expectedSize, $dino->getSizeDescription());
     }
-
 
 
     public function sizeDescriptionProvider(): Generator
@@ -59,12 +57,25 @@ class DinosaurTest extends TestCase
     }
 
 
-    public function testIsAcceptingVisitorsIfSick(): void
+    /**
+     * @param HealthStatus $healthStatus
+     * @param bool $expectedStatus
+     * @return void
+     * @dataProvider healthStatusProvider
+     */
+    public function testIsAcceptingVisitorsBasedOnHealthStatus(HealthStatus $healthStatus, bool $expectedStatus): void
     {
         $dino = new Dinosaur('Bumpy');
-        $dino->setHealth(HealthStatus::SICK);
+        $dino->setHealth($healthStatus);
 
-        self::assertFalse($dino->isAcceptingVisitors());
+        self::assertSame($expectedStatus, $dino->isAcceptingVisitors());
+    }
+
+
+    public function healthStatusProvider(): \Generator
+    {
+        yield 'Sick dino is not accepting visitors' => [HealthStatus::SICK, false];
+        yield 'Sick dino is accepting visitors' => [HealthStatus::HUNGRY, true];
     }
 
 }
