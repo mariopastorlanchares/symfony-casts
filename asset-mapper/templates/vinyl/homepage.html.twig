@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Create a new Record | {{ parent() }}{% endblock %}
+
+{% block body %}
+<div class="px-4">
+    <h1 class="text-3xl font-semibold text-center mb-5 mr-3">{{ title }} <i class="fa fa-edit pl-3 text-xs"></i></h1>
+    <div class="flex justify-center mt-5 bg-gray-600 p-5 rounded-xl">
+        <div class="">
+            {{ include('mix/_recordSvg.html.twig') }}
+        </div>
+        <div class="pl-10">
+            <h2 class="mb-4">6 songs <span class="italic text-sm">(30 minutes of 60 still available)</span></h2>
+            {% for track in tracks %}
+            <div class="song-list">
+                <div class="flex mb-3">
+                    <a href="#">
+                        <i class="fas fa-play mr-3"></i>
+                    </a>
+                    <span class="song-details">{{ track.song }} - {{ track.artist }}</span>
+                    <a href="#">
+                        <i class="fas fa-bars mx-3"></i>
+                    </a>
+                    <a href="#">
+                        <i class="fas fa-times"></i>
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+            <button type="button" class="bg-green-500 text-white py-2 px-4 rounded"><i class="fas fa-plus"></i> Add a song</button>
+        </div>
+    </div>
+</div>
+{% endblock %}
