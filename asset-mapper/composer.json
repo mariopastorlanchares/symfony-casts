@@ -15,6 +15,7 @@
         "pagerfanta/twig": "^4.0",
         "stof/doctrine-extensions-bundle": "^1.7",
         "symfony/asset": "6.3.*",
+        "symfony/asset-mapper": "6.3.*",
         "symfony/console": "6.3.*",
         "symfony/dotenv": "6.3.*",
         "symfony/flex": "^2",
