@@ -1,3 +1,28 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+    --bs-border-radius: 1rem;
+    --bs-primary: #0de1fd;
+}
+.btn-primary {
+    --bs-btn-bg: var(--bs-primary);
+    --bs-btn-border-color: var(--bs-primary);
+    --bs-btn-disabled-bg: var(--bs-primary);
+    --bs-btn-disabled-border-color: var(--bs-primary);
+    --bs-btn-hover-bg: #0bbfd7;
+    --bs-btn-hover-border-color: #0ba7d7;
+}
 body {
     background-color: skyblue;
+    font-family: 'Inter Variable', sans-serif;
+}
+.bg-logo {
+    display: inline-block;
+    width: 32px;
+    height: 32px;
+    background-image: url('../images/penguin.png');
+    background-size: contain;
+    background-repeat: no-repeat;
 }

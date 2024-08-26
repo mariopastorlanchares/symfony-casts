@@ -10,6 +10,7 @@
     <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('images/favicon-16x16.png') }}">
 
     {% block stylesheets %}
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource-variable/inter@5.0.3/index.min.css">
         <link rel="stylesheet" href="{{ asset('styles/app.css') }}">
     {% endblock %}
 
@@ -27,7 +28,7 @@
     <nav class="bg-gray-900">
         <div class="container mx-auto flex items-center justify-between px-4 py-2">
             <a href="{{ path('app_homepage') }}" class="flex">
-                <i class="fas fa-record-vinyl"></i>
+                <span class="bg-logo"></span>
                 <span class="pt-1 px-2 font-bold">Mixed Vinyl</span>
             </a>
             <!-- For simplicity, the collapse feature is omitted -->
@@ -52,6 +53,7 @@
 </div>
 
 <img src="{{ asset('images/penguin.png') }}" alt="penguin">
+
 
 {% block body %}{% endblock %}
 
