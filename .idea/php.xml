@@ -173,6 +173,7 @@
       <path value="$PROJECT_DIR$/asset-mapper/vendor/stof/doctrine-extensions-bundle" />
       <path value="$PROJECT_DIR$/asset-mapper/vendor/psr/event-dispatcher" />
       <path value="$PROJECT_DIR$/asset-mapper/vendor/symfonycasts/tailwind-bundle" />
+      <path value="$PROJECT_DIR$/asset-mapper/vendor/symfony/stimulus-bundle" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="8.1" />
