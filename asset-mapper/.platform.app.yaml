@@ -9,7 +9,10 @@ runtime:
         - sodium
         - ctype
         - iconv
-        
+        - pdo_pgsql
+
+relationships:
+    database: 'database:postgresql'
 
 #variables:
 #    php:
@@ -27,7 +30,9 @@ web:
             root: "public"
             expires: 1h
             passthru: "/index.php"
-
+            rules:
+                '^\/assets\/.*':
+                    expires: 365d
 
 
 mounts:
@@ -41,6 +46,13 @@ hooks:
         curl -fs https://get.symfony.com/cloud/configurator | bash
         
         NODE_VERSION=18 symfony-build
+        
+        curl -sLO https://github.com/tailwindlabs/tailwindcss/releases/download/v3.3.2/tailwindcss-linux-x64
+        mv tailwindcss-linux-x64 bin/tailwindcss
+        chmod +x bin/tailwindcss
+        ./bin/tailwindcss -i assets/styles/app.css -o assets/styles/app.tailwind.css
+        
+        php bin/console asset-map:compile
 
     deploy: |
         set -x -e
