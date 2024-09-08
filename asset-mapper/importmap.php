@@ -22,4 +22,13 @@ return [
         'downloaded_to' => 'vendor/lodash.js',
         'url' => 'https://cdn.jsdelivr.net/npm/lodash@4.17.21/+esm',
     ],
+    '@hotwired/stimulus' => [
+        'url' => 'https://cdn.jsdelivr.net/npm/@hotwired/stimulus@3.2.2/+esm',
+    ],
+    '@symfony/stimulus-bundle' => [
+        'path' => '@symfony/stimulus-bundle/loader.js',
+    ],
+    '@hotwired/turbo' => [
+        'url' => 'https://cdn.jsdelivr.net/npm/@hotwired/turbo@7.3.0/+esm',
+    ],
 ];

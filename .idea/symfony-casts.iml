@@ -168,6 +168,7 @@
       <excludeFolder url="file://$MODULE_DIR$/asset-mapper/vendor/zenstruck/foundry" />
       <excludeFolder url="file://$MODULE_DIR$/asset-mapper/vendor/symfonycasts/tailwind-bundle" />
       <excludeFolder url="file://$MODULE_DIR$/asset-mapper/vendor/symfony/stimulus-bundle" />
+      <excludeFolder url="file://$MODULE_DIR$/asset-mapper/vendor/symfony/ux-turbo" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

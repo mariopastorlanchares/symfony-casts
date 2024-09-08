@@ -25,6 +25,7 @@
         "symfony/proxy-manager-bridge": "6.3.*",
         "symfony/runtime": "6.3.*",
         "symfony/twig-bundle": "6.3.*",
+        "symfony/ux-turbo": "^2.19",
         "symfony/yaml": "6.3.*",
         "symfonycasts/tailwind-bundle": "^0.6.0",
         "twig/extra-bundle": "^2.12|^3.0",
