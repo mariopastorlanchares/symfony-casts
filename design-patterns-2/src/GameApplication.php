@@ -3,6 +3,8 @@
 namespace App;
 
 use App\ActionCommand\AttackCommand;
+use App\ActionCommand\HealCommand;
+use App\ActionCommand\SurrenderCommand;
 use App\Builder\CharacterBuilder;
 use App\Character\Character;
 use App\Observer\GameObserverInterface;
@@ -32,7 +34,16 @@ class GameApplication
                 ), '']);
 
             // Player's turn
-            $playerAction = new AttackCommand($player, $ai, $fightResultSet);
+            $actionChoice = GameApplication::$printer->choice('Your turn', [
+                'Attack',
+                'Heal',
+                'Surrender'
+            ]);
+            $playerAction = match ($actionChoice) {
+                'Attack' => new AttackCommand($player, $ai, $fightResultSet),
+                'Heal' => new HealCommand($player),
+                'Surrender' => new SurrenderCommand($player),
+            };
             $playerAction->execute();
 
             if ($this->didPlayerDie($ai)) {
@@ -44,8 +55,15 @@ class GameApplication
             $aiAction = new AttackCommand($ai, $player, $fightResultSet);
             $aiAction->execute();
             if ($this->didPlayerDie($player)) {
-                $this->endBattle($fightResultSet, $ai, $player);
-                return;
+                $undoChoice = GameApplication::$printer->confirm(
+                    'You\'ve lost! Do you want to undo your last turn?.'
+                );
+                if (!$undoChoice) {
+                    $this->endBattle($fightResultSet, $ai, $player);
+                    return;
+                }
+                $aiAction->undo();
+                $playerAction->undo();
             }
 
             $this->printCurrentHealth($player, $ai);

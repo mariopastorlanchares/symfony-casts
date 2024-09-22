@@ -8,6 +8,9 @@ use App\GameApplication;
 
 class HealCommand implements ActionCommandInterface
 {
+    private int $currentHealth;
+    private int $stamina;
+
     public function __construct(private readonly Character $player)
     {
     }
@@ -18,6 +21,9 @@ class HealCommand implements ActionCommandInterface
         $newAmount = $this->player->getCurrentHealth() + $healAmount;
         $newAmount = min($newAmount, $this->player->getMaxHealth());
 
+        $this->currentHealth = $this->player->getCurrentHealth();
+        $this->stamina = $this->player->getStamina();
+
         $this->player->setHealth($newAmount);
         $this->player->setStamina(Character::MAX_STAMINA);
 
@@ -25,5 +31,11 @@ class HealCommand implements ActionCommandInterface
             'You healed %d damage',
             $healAmount
         ));
+    }
+
+    public function undo()
+    {
+       $this->player->setHealth($this->currentHealth);
+       $this->player->setStamina($this->stamina);
     }
 }

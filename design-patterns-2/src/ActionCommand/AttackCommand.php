@@ -6,9 +6,12 @@ use App\Character\Character;
 use App\FightResultSet;
 use App\GameApplication;
 
-class AttackCommand
+class AttackCommand implements ActionCommandInterface
 {
 
+
+    private int $damageDealt;
+    private int $stamina;
 
     public function __construct(
         private readonly Character      $player,
@@ -20,7 +23,7 @@ class AttackCommand
 
     public function execute()
     {
-
+        $this->stamina = $this->player->getStamina();
 
         $playerDamage = $this->player->attack();
         if ($playerDamage === 0) {
@@ -29,10 +32,19 @@ class AttackCommand
         }
 
         $damageDealt = $this->opponent->receiveAttack($playerDamage);
+        $this->damageDealt = $damageDealt;
         $this->fightResultSet->of($this->player)->addDamageDealt($damageDealt);
 
         GameApplication::$printer->printFor($this->player)->attackMessage($damageDealt);
         GameApplication::$printer->writeln('');
         usleep(300000);
+    }
+
+    public function undo()
+    {
+        $this->opponent->setHealth($this->opponent->getCurrentHealth() + $this->damageDealt);
+        $this->opponent->setStamina($this->stamina);
+        $this->fightResultSet->of($this->opponent)->removeDamageDealt($this->damageDealt);
+        $this->fightResultSet->of($this->opponent)->removeDamageReceived($this->damageDealt);
     }
 }
