@@ -1,0 +1,38 @@
+<?php
+
+namespace App\ActionCommand;
+
+use App\Character\Character;
+use App\FightResultSet;
+use App\GameApplication;
+
+class AttackCommand
+{
+
+
+    public function __construct(
+        private readonly Character      $player,
+        private readonly Character      $opponent,
+        private readonly FightResultSet $fightResultSet
+    )
+    {
+    }
+
+    public function execute()
+    {
+
+
+        $playerDamage = $this->player->attack();
+        if ($playerDamage === 0) {
+            GameApplication::$printer->printFor($this->player)->exhaustedMessage();
+            $this->fightResultSet->of($this->player)->addExhaustedTurn();
+        }
+
+        $damageDealt = $this->opponent->receiveAttack($playerDamage);
+        $this->fightResultSet->of($this->player)->addDamageDealt($damageDealt);
+
+        GameApplication::$printer->printFor($this->player)->attackMessage($damageDealt);
+        GameApplication::$printer->writeln('');
+        usleep(300000);
+    }
+}

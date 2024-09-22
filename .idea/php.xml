@@ -185,7 +185,6 @@
   <component name="PhpUnit">
     <phpunit_settings>
       <PhpUnitSettings custom_loader_path="$PROJECT_DIR$/asset-mapper/vendor/autoload.php" />
-      <PhpUnitSettings configuration_file_path="$PROJECT_DIR$/testing/phpunit.xml.dist" custom_loader_path="$PROJECT_DIR$/testing/vendor/autoload.php" use_configuration_file="true" />
     </phpunit_settings>
   </component>
   <component name="PsalmOptionsConfiguration">
