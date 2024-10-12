@@ -12,6 +12,8 @@ use App\AttackType\FireBoltType;
 use App\AttackType\MultiAttackType;
 use App\AttackType\TwoHandedSwordType;
 use App\Character\Character;
+use App\Factory\AttackTypeFactory;
+use App\Factory\AttackTypeFactoryInterface;
 
 class CharacterBuilder
 {
@@ -20,6 +22,12 @@ class CharacterBuilder
     private array $attackTypes;
     private string $armorType;
     private int $level;
+
+    public function __construct(
+        private AttackTypeFactoryInterface $attackTypeFactory
+    )
+    {
+    }
 
     public function setMaxHealth(int $maxHealth): self
     {
@@ -58,7 +66,9 @@ class CharacterBuilder
 
     public function buildCharacter(): Character
     {
-        $attackTypes = array_map(fn(string $attackType) => $this->createAttackType($attackType), $this->attackTypes);
+        $attackTypes = array_map(fn(string $attackType) => $this->attackTypeFactory->create($attackType),
+            $this->attackTypes
+        );
         if (count($attackTypes) === 1) {
             $attackType = $attackTypes[0];
         } else {
@@ -80,16 +90,6 @@ class CharacterBuilder
         return $character;
     }
 
-    private function createAttackType(string $attackType): AttackType
-    {
-        return match ($attackType) {
-            'bow' => new BowType(),
-            'fire_bolt' => new FireBoltType(),
-            'sword' => new TwoHandedSwordType(),
-            default => throw new \RuntimeException('Invalid attack type given')
-        };
-    }
-
     private function createArmorType(): ArmorType
     {
         return match ($this->armorType) {
@@ -107,5 +107,10 @@ class CharacterBuilder
         $this->attackTypes = [];
         $this->armorType = '';
         $this->level = 0;
+    }
+
+    public function setAttackTypeFactory(AttackTypeFactoryInterface $attackTypeFactory): void
+    {
+        $this->attackTypeFactory = $attackTypeFactory;
     }
 }
