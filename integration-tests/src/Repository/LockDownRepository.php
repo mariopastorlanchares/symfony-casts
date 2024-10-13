@@ -21,28 +21,10 @@ class LockDownRepository extends ServiceEntityRepository
         parent::__construct($registry, LockDown::class);
     }
 
-//    /**
-//     * @return LockDown[] Returns an array of LockDown objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('l')
-//            ->andWhere('l.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('l.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    public function isInLockDown(): bool
+    {
 
-//    public function findOneBySomeField($value): ?LockDown
-//    {
-//        return $this->createQueryBuilder('l')
-//            ->andWhere('l.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+        return false;
+    }
+
 }
