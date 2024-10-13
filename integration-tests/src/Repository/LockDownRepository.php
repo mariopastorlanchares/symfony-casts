@@ -3,7 +3,9 @@
 namespace App\Repository;
 
 use App\Entity\LockDown;
+use App\Enum\LockDownStatus;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -21,10 +23,22 @@ class LockDownRepository extends ServiceEntityRepository
         parent::__construct($registry, LockDown::class);
     }
 
+    /**
+     * @throws NonUniqueResultException
+     */
     public function isInLockDown(): bool
     {
-
-        return false;
+        // find the most recent lock down
+        $lockDown = $this->createQueryBuilder('lock_down')
+            ->orderBy('lock_down.createdAt', 'DESC')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+        if (!$lockDown) {
+            return false;
+        }
+        assert($lockDown instanceof LockDown);
+        return $lockDown->getStatus() !== LockDownStatus::ENDED;
     }
 
 }
