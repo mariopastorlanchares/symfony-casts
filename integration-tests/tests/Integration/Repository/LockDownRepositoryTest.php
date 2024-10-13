@@ -1,15 +1,20 @@
 <?php
 
 use App\Repository\LockDownRepository;
-use PHPUnit\Framework\TestCase;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
-class LockDownRepositoryTest extends TestCase
+class LockDownRepositoryTest extends KernelTestCase
 {
 
     public function testIsInLockDownWithNoLockDownRows()
     {
+        self::bootKernel();
 
-        $repository = new LockDownRepository();
+        $lockDownRepository = self::getContainer()->get(LockDownRepository::class);
+
+        assert($lockDownRepository instanceof LockDownRepository);
+
+        $this->assertFalse($lockDownRepository->isInLockDown());
     }
 
 }
