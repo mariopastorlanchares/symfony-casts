@@ -29,16 +29,21 @@ class LockDownRepository extends ServiceEntityRepository
     public function isInLockDown(): bool
     {
         // find the most recent lock down
-        $lockDown = $this->createQueryBuilder('lock_down')
-            ->orderBy('lock_down.createdAt', 'DESC')
-            ->setMaxResults(1)
-            ->getQuery()
-            ->getOneOrNullResult();
+        $lockDown = $this->findMostRecent();
         if (!$lockDown) {
             return false;
         }
         assert($lockDown instanceof LockDown);
         return $lockDown->getStatus() !== LockDownStatus::ENDED;
+    }
+
+    public function findMostRecent(): ?LockDown
+    {
+        return $this->createQueryBuilder('lock_down')
+            ->orderBy('lock_down.createdAt', 'DESC')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
     }
 
 }
