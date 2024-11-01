@@ -69,4 +69,10 @@ class GithubService
 
         return $health ?? HealthStatus::HEALTHY;
     }
+
+    public function clearLockDownAlerts(): void
+    {
+        $this->logger->info('Cleaning lock down alerts on Github...');
+    }
+
 }

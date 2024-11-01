@@ -4,6 +4,7 @@ namespace Service;
 
 use App\Enum\LockDownStatus;
 use App\Factory\LockDownFactory;
+use App\Service\GithubService;
 use App\Service\LockDownHelper;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Zenstruck\Foundry\Test\Factories;
@@ -19,9 +20,31 @@ class LockDownHelperTest extends KernelTestCase
         $lockDown = LockDownFactory::createOne([
             'status' => LockDownStatus::ACTIVE,
         ]);
-        $lockDownHelper = self::getContainer()->get(LockDownHelper::class);
-        assert($lockDownHelper instanceof LockDownHelper);
+
+        $gitHubService = $this->createMock(GithubService::class);
+        $gitHubService->expects($this->once())
+            ->method('clearLockDownAlerts');
+
+        self::getContainer()->set(GithubService::class, $gitHubService);
+
+        $lockDownHelper = $this->getLockDownHelper();
         $lockDownHelper->endCurrentLockDown();
         $this->assertSame(LockDownStatus::ENDED, $lockDown->getStatus());
     }
+
+
+    public function testDinoEscapedPersistLockDown()
+    {
+        self::bootKernel();
+        $this->getLockDownHelper()->dinoEscaped();
+        LockDownFactory::repository()->assert()->count(1);
+    }
+
+    public function getLockDownHelper(): LockDownHelper
+    {
+
+        return self::getContainer()->get(LockDownHelper::class);
+
+    }
+
 }

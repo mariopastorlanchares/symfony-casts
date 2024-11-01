@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\Entity\LockDown;
 use App\Enum\LockDownStatus;
 use App\Repository\LockDownRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -11,6 +12,7 @@ class LockDownHelper
     public function __construct(
         private LockDownRepository $lockDownRepository,
         private EntityManagerInterface $entityManager,
+        private GithubService $githubService
     )
     {
     }
@@ -23,6 +25,17 @@ class LockDownHelper
         }
 
         $lockDown->setStatus(LockDownStatus::ENDED);
+        $this->entityManager->flush();
+
+        $this->githubService->clearLockDownAlerts();
+    }
+
+    public function dinoEscaped()
+    {
+        $lockDown = new LockDown();
+        $lockDown->setStatus(LockDownStatus::ACTIVE);
+        $lockDown->setReason('Dino escaped... NOT good...');
+        $this->entityManager->persist($lockDown);
         $this->entityManager->flush();
     }
 }

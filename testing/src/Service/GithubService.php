@@ -38,7 +38,6 @@ class GithubService
 
         return $health;
     }
-
     private function getDinoStatusFromLabels(array $labels): HealthStatus
     {
         $health = HealthStatus::HEALTHY;
