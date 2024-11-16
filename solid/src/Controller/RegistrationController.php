@@ -6,17 +6,22 @@ use App\Entity\User;
 use App\Form\RegistrationFormType;
 use App\Manager\UserManager;
 use App\Repository\UserRepository;
+use App\Service\ConfirmationEmailSender;
 use Doctrine\ORM\EntityManagerInterface;
+use Random\RandomException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 class RegistrationController extends AbstractController
 {
     /**
      * @Route("/signup", name="signup")
+     * @throws TransportExceptionInterface
+     * @throws RandomException
      */
-    public function signup(Request $request, UserManager $userManager)
+    public function signup(Request $request, UserManager $userManager, ConfirmationEmailSender $confirmationEmailSender)
     {
         $form = $this->createForm(RegistrationFormType::class);
 
@@ -29,7 +34,8 @@ class RegistrationController extends AbstractController
 
             $plainPassword = $form->get('plainPassword')->getData();
 
-            $userManager->register($user, $plainPassword);
+            $userManager->create($user, $plainPassword);
+            $confirmationEmailSender->send($user);
 
             $this->addFlash('success', 'Fist Pump! Let\'s go find some Sasquatch!');
 
