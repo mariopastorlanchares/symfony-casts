@@ -21,12 +21,15 @@ class SightingScorer
 
     public function score(BigFootSighting $sighting): BigFootSightingScore
     {
+        $startTime = microtime(true);
         $score = 0;
         foreach ($this->scoringFactors as $scoringFactor) {
             $score += $scoringFactor->score($sighting);
         }
+        $endTime = microtime(true);
+        $duration = $endTime - $startTime;
 
-        return new BigFootSightingScore($score);
+        return new BigFootSightingScore($score, $duration);
     }
 
 }

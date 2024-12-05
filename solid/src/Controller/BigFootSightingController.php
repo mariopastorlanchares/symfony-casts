@@ -4,11 +4,14 @@ namespace App\Controller;
 
 use App\Entity\BigFootSighting;
 use App\Form\BigfootSightingType;
+use App\Model\DebuggableBigFootSightingScore;
 use App\Service\SightingScorer;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class BigFootSightingController extends AbstractController
@@ -17,7 +20,7 @@ class BigFootSightingController extends AbstractController
      * @Route("/sighting/upload", name="app_sighting_upload")
      * @IsGranted("ROLE_USER")
      */
-    public function upload(Request $request, SightingScorer $sightingScorer, EntityManagerInterface $entityManager)
+    public function upload(Request $request, DebuggableBigFootSightingScore $sightingScorer, EntityManagerInterface $entityManager): RedirectResponse|Response
     {
         $form = $this->createForm(BigFootSightingType::class);
         $form->handleRequest($request);
@@ -32,6 +35,10 @@ class BigFootSightingController extends AbstractController
 
             $entityManager->persist($sighting);
             $entityManager->flush();
+            $this->addFlash('success', sprintf(
+                'Btw, the scoring took %f milliseconds',
+                $bfsScore->getCalculationTime() * 1000
+            ));
 
             $this->addFlash('success', 'New BigFoot Sighting created successfully!');
 
