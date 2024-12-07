@@ -26,10 +26,22 @@ class SightingScorer
         foreach ($this->scoringFactors as $scoringFactor) {
             $score += $scoringFactor->score($sighting);
         }
+        foreach ($this->scoringFactors as $scoringFactor) {
+            $score = $scoringFactor->adjustScore($score, $sighting);
+        }
         $endTime = microtime(true);
         $duration = $endTime - $startTime;
 
-        return new BigFootSightingScore($score, $duration);
+        return new BigFootSightingScore($score);
+    }
+
+    public function adjustScore(int $finalScore, BigFootSighting $sighting): int
+    {
+        $photosCount = count($sighting->getImages());
+        if ($finalScore < 50 && $photosCount > 2) {
+            $finalScore += $photosCount * 5;
+        }
+        return $finalScore;
     }
 
 }
