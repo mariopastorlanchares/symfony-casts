@@ -4,6 +4,7 @@ namespace App\Service;
 
 use App\Entity\BigFootSighting;
 use App\Model\BigFootSightingScore;
+use App\Scoring\ScoreAdjusterInterface;
 use App\Scoring\ScoringFactorInterface;
 
 class SightingScorer
@@ -14,23 +15,26 @@ class SightingScorer
      */
     private iterable $scoringFactors;
 
-    public function __construct(iterable $scoringFactors)
+    /**
+     * @var ScoreAdjusterInterface[]
+     */
+    private iterable $scoringAdjusters;
+
+    public function __construct(iterable $scoringFactors, iterable $scoringAdjusters)
     {
         $this->scoringFactors = $scoringFactors;
+        $this->scoringAdjusters = $scoringAdjusters;
     }
 
     public function score(BigFootSighting $sighting): BigFootSightingScore
     {
-        $startTime = microtime(true);
         $score = 0;
         foreach ($this->scoringFactors as $scoringFactor) {
             $score += $scoringFactor->score($sighting);
         }
-        foreach ($this->scoringFactors as $scoringFactor) {
+        foreach ($this->scoringAdjusters as $scoringFactor) {
             $score = $scoringFactor->adjustScore($score, $sighting);
         }
-        $endTime = microtime(true);
-        $duration = $endTime - $startTime;
 
         return new BigFootSightingScore($score);
     }

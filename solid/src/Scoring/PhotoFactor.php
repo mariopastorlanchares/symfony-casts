@@ -4,7 +4,7 @@ namespace App\Scoring;
 
 use App\Entity\BigFootSighting;
 
-class PhotoFactor implements ScoringFactorInterface
+class PhotoFactor implements ScoringFactorInterface, ScoreAdjusterInterface
 {
 
     public function score(BigFootSighting $sighting): int
