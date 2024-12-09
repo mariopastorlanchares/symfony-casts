@@ -1,24 +1,19 @@
 <?php
 
-namespace App\Comment;
+namespace App\Service;
 
-use App\Entity\Comment;
-
-class CommentSpamManager
+class RegexSpamWordHelper
 {
-    public function validate(Comment $comment): void
+
+    public function getMatchedSpamWords(string $content): array
     {
-        $content = $comment->getContent();
         $badWordsOnComment = [];
 
         $regex = implode('|', $this->spamWords());
 
         preg_match_all("/$regex/i", $content, $badWordsOnComment);
 
-        if (count($badWordsOnComment[0]) >= 2) {
-            // We could throw a custom exception if needed
-            throw new \RuntimeException('Message detected as spam');
-        }
+        return $badWordsOnComment[0];
     }
 
     private function spamWords(): array
