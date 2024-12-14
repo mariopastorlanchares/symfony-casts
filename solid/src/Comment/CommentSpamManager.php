@@ -4,28 +4,24 @@ namespace App\Comment;
 
 use App\Entity\Comment;
 use App\Service\RegexSpamWordHelper;
-use RuntimeException;
 
 class CommentSpamManager
 {
+    private CommentSpamCounterInterface $spamWordCounter;
 
-    private RegexSpamWordHelper $regexSpamWordHelper;
-
-    public function __construct(RegexSpamWordHelper $regexSpamWordHelper)
+    public function __construct(CommentSpamCounterInterface $spamWordCounter)
     {
-        $this->regexSpamWordHelper = $regexSpamWordHelper;
+        $this->spamWordCounter = $spamWordCounter;
     }
 
     public function validate(Comment $comment): void
     {
-
         $content = $comment->getContent();
-        $badWordsOnComment = $this->regexSpamWordHelper->getMatchedSpamWords($content);
-
-        if (count($badWordsOnComment) >= 2) {
-        throw new RuntimeException('Message detected as span');
+        $badWordsCount = $this->spamWordCounter->countSpamWords($content);
+        if ($badWordsCount >= 2) {
+            // We could throw a custom exception if needed
+            throw new \RuntimeException('Message detected as spam');
         }
-
     }
 
 

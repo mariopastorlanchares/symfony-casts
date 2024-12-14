@@ -1,21 +1,24 @@
 <?php
 
-namespace App\Service;
+namespace App\Comment;
 
-use App\Comment\CommentSpamCounterInterface;
+use App\Entity\Comment;
 
-class RegexSpamWordHelper implements CommentSpamCounterInterface
+class CommentSpamManager
 {
-
-    private function getMatchedSpamWords(string $content): array
+    public function validate(Comment $comment): void
     {
+        $content = $comment->getContent();
         $badWordsOnComment = [];
 
         $regex = implode('|', $this->spamWords());
 
         preg_match_all("/$regex/i", $content, $badWordsOnComment);
 
-        return $badWordsOnComment[0];
+        if (count($badWordsOnComment[0]) >= 2) {
+            // We could throw a custom exception if needed
+            throw new \RuntimeException('Message detected as spam');
+        }
     }
 
     private function spamWords(): array
@@ -27,10 +30,5 @@ class RegexSpamWordHelper implements CommentSpamCounterInterface
             'earn money',
             'SymfonyCats',
         ];
-    }
-
-    public function countSpamWords(string $content): int
-    {
-        return count($this->getMatchedSpamWords($content));
     }
 }
